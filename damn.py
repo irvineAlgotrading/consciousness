@@ -47,8 +47,6 @@ class ConsciousnessModule:
 
 def main():
 
-
-
     subsets = get_subsets(self_awareness_aspects)
 
     cognition_prompt = {
@@ -89,6 +87,7 @@ def update_brain_region_values(brain_regions):
         region.update_value()
 
 def main():
+
     self_awareness_aspects = [
         'body_awareness',
         'emotional_awareness',
@@ -111,6 +110,7 @@ def main():
         'goal-setting',
         'self-development'
     ]
+    
     # Define brain regions
     prefrontal_cortex = BrainRegion('Prefrontal Cortex', 'executive functions', [])
     parietal_cortex = BrainRegion('Parietal Cortex', 'spatial awareness', [])
