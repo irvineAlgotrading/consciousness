@@ -68,7 +68,16 @@ class BrainRegion:
         for connection in self.connections:
             connection.value += self.value / len(self.connections)
 
+    def update_brain_region_values(brain_regions):
+        for region in brain_regions:
+            region.update_value()
+
 def main():
+
+    def update_brain_region_values(brain_regions):
+        for region in brain_regions:
+            region.update_value()
+            
     self_awareness_aspects = [
         'body_awareness',
         'emotional_awareness',
@@ -100,7 +109,7 @@ def main():
     }
 
     # You can use the cognition_prompt in your GPT-4 API request
-    print(cognition_prompt)
+    #print(cognition_prompt)
 
     # Define brain regions
     prefrontal_cortex = BrainRegion('Prefrontal Cortex', 'executive functions', [])
@@ -119,8 +128,7 @@ def main():
     consciousness_module = ConsciousnessModule()
 
     while True:
-        
-        # Initialize values with a 1337 seed
+    # Initialize values with a 1337 seed
         update_brain_region_values(brain_regions)
 
         # Print updated values
@@ -130,22 +138,19 @@ def main():
         # Update submodule states based on brain regions
         consciousness_module.update_submodule_states_based_on_brain_regions(brain_regions)
 
-
         # Print updated submodule states
         consciousness_module.display_submodule_states()
 
-        
         for region_instance in brain_regions:
-
             # Update brain region values based on functions and connections
             for region in brain_regions:
                 region.update_value_based_on_function()
                 region.update_value_based_on_connections()
 
             # Print updated submodule states
-            consciousness_module.display_submodule_states(region_instance)       
-        
-        time.sleep(0.5)
+            consciousness_module.display_submodule_states()
+
+        time.sleep(1)
 
 if __name__ == "__main__":
     main()
