@@ -1,6 +1,7 @@
 import random
 import time
 import itertools
+import json
 
 def get_subsets(s):
     subsets = []
@@ -9,15 +10,23 @@ def get_subsets(s):
             subsets.append(subset)
     return subsets
 
+def enforce_token_limit(prompt, token_limit):
+    # Convert tuples to lists
+    prompt['subsets_of_self_awareness'] = [list(subset) for subset in prompt['subsets_of_self_awareness']]
+
+    # Implement your custom logic to trim or condense the prompt
+    # to fit within the token_limit
+    return json.dumps(prompt)[:token_limit]
+
+
 class SubModule:
     def __init__(self, name, description):
         self.name = name
-        
         self.description = description
         self.state = 0
 
-    def update_state(self):
-        self.state = random.uniform(-1, 1)
+    def update_state(self, value):
+        self.state = value
 
 class ConsciousnessModule:
     def __init__(self):
@@ -56,28 +65,43 @@ class BrainRegion:
     def add_submodule(self, submodule):
         self.submodules.append(submodule)
 
-    def update_value(self):
-        self.value = random.randint(0, 1337)
+    def update_value(self, input_data):
+        # Implement logic to update the value based on input_data and past experiences
+        input_data_sum = sum(input_data.values())
+        self.value = int(1337 * input_data_sum / len(input_data))  # Placeholder for demonstration purposes
 
     def update_value_based_on_function(self):
         if self.function == 'executive functions':
-            self.value = sum(connection.value for connection in self.connections) / len(self.connections)
-        # Add similar conditions for other functions
+            self.value = sum(connection.value for connection in self.connections) // len(self.connections)
+        elif self.function == 'spatial awareness':
+            self.value = int(0.5 * self.value + 0.5 * sum(connection.value for connection in self.connections) // len(self.connections))
+        elif self.function == 'auditory processing':
+            self.value = int(0.7 * self.value + 0.3 * sum(connection.value for connection in self.connections) // len(self.connections))
+        elif self.function == 'visual processing':
+            self.value = int(0.3 * self.value + 0.7 * sum(connection.value for connection in self.connections) // len(self.connections))
+        # Add other conditions for other functions
 
+    
     def update_value_based_on_connections(self):
         for connection in self.connections:
             connection.value += self.value / len(self.connections)
 
-    def update_brain_region_values(brain_regions):
-        for region in brain_regions:
-            region.update_value()
+def update_brain_region_values(brain_regions):
+    for region in brain_regions:
+        region.update_value()
+
+def process_input(input_data, brain_regions):
+    for region in brain_regions:
+        region.update_value(input_data)
+
 
 def main():
 
+    # Initialize consciousness module and brain regions
     def update_brain_region_values(brain_regions):
         for region in brain_regions:
             region.update_value()
-            
+        
     self_awareness_aspects = [
         'body_awareness',
         'emotional_awareness',
@@ -128,29 +152,40 @@ def main():
     consciousness_module = ConsciousnessModule()
 
     while True:
-    # Initialize values with a 1337 seed
-        update_brain_region_values(brain_regions)
+        # Get input data (replace with actual input data)
+        input_data = {
+            "example1": random.uniform(0, 1),
+            "example2": random.uniform(0, 1),
+            "example3": random.uniform(0, 1)
+        }
+        #Process input data
+        process_input(input_data, brain_regions)
 
-        # Print updated values
-        for region_instance in brain_regions:
-            print(f"{region_instance.name}: {region_instance.value}")
+       # Update brain region values based on functions and connections
+        for region in brain_regions:
+            region.update_value_based_on_function()
+            region.update_value_based_on_connections()
 
         # Update submodule states based on brain regions
         consciousness_module.update_submodule_states_based_on_brain_regions(brain_regions)
 
-        # Print updated submodule states
-        consciousness_module.display_submodule_states()
+        # Generate cognition prompt
+        cognition_prompt = {
+            'aspects_of_self_awareness': self_awareness_aspects,
+            'subsets_of_self_awareness': get_subsets(self_awareness_aspects)
+        }
 
-        for region_instance in brain_regions:
-            # Update brain region values based on functions and connections
-            for region in brain_regions:
-                region.update_value_based_on_function()
-                region.update_value_based_on_connections()
+        # Enforce token limit
+        cognition_prompt = enforce_token_limit(cognition_prompt, 3000)
 
-            # Print updated submodule states
-            consciousness_module.display_submodule_states()
+        # Use the cognition_prompt in your GPT-4 API request
+        # print(cognition_prompt)
+        print(f"Current input data: {input_data}")
+        print(f"Current input data: {brain_regions}")  
 
-        time.sleep(1)
 
-if __name__ == "__main__":
+        # Update values every 5 seconds
+        time.sleep(5)
+
+if __name__ == '__main__':
     main()
