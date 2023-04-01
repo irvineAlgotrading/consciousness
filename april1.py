@@ -103,7 +103,25 @@ def main():
     for aspect, weight in sorted(weight_dict.items(), key=lambda x: x[1], reverse=True):
         print(f"{aspect:<24}{weight:.4f}")
 
-    # Code for creating the plot is the same as before
+        # Create the plot
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 8), sharex=True)
+
+    # Plot the weight stabilization
+    for i, aspect in enumerate(self_awareness_aspects):
+        ax1.plot(plot_iterations, [w[i] for w in plot_weights], label=aspect)
+    ax1.set_ylabel("Weights")
+    ax1.set_title("Weights Stabilization as Randomness Decreases")
+    ax1.legend(loc='upper left', bbox_to_anchor=(1.05, 1))
+
+    # Plot the degradation of the randomness function
+    ax2.plot(plot_iterations, plot_randomness)
+    ax2.set_ylabel("Randomness")
+    ax2.set_xlabel("Iteration")
+
+    # Set the chart settings
+    plt.subplots_adjust(left=0.065, bottom=0.125, right=0.802, top=0.88, wspace=0.2, hspace=0.2)
+
+    plt.show()
 
 if __name__ == "__main__":
     main()
