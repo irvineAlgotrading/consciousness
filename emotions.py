@@ -111,7 +111,7 @@ def main():
     ax2.set_ylabel("Randomness")
     ax2.set_xlabel("Iteration")
 
-    plt.subplots_adjust(left=0.065, bottom=0.125, right=0.802, top=0.88, wspace=0.2, hspace=0.2)
+    plt.subplots_adjust(left=0.065, bottom=0.125, right=0.667, top=0.88, wspace=0.2, hspace=0.2)
 
     plt.show()
 
