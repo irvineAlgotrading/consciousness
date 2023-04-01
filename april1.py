@@ -67,8 +67,28 @@ def main():
     initial_values = {aspect: -1 + increment * (rank - 1) for rank, aspect in consciousness_rank.items()}
     weight_dict = {aspect: initial_values[aspect] for aspect in self_awareness_aspects}
 
-    interrelations = np.identity(num_aspects)  # You can modify the interrelations matrix based on your interpretation
+    interrelations = np.identity(num_aspects)
 
+    # 1. Metacognition - Introspection
+    interrelations[self_awareness_aspects.index('metacognition'), self_awareness_aspects.index('introspection')] = 0.2
+    interrelations[self_awareness_aspects.index('introspection'), self_awareness_aspects.index('metacognition')] = 0.2
+
+    # 2. Goal-setting - Motivation
+    interrelations[self_awareness_aspects.index('goal-setting'), self_awareness_aspects.index('motivation')] = 0.2
+    interrelations[self_awareness_aspects.index('motivation'), self_awareness_aspects.index('goal-setting')] = 0.2
+
+    # 3. Self-regulation - Self-efficacy
+    interrelations[self_awareness_aspects.index('self-regulation'), self_awareness_aspects.index('self-efficacy')] = 0.2
+    interrelations[self_awareness_aspects.index('self-efficacy'), self_awareness_aspects.index('self-regulation')] = 0.2
+
+    # 4. Social Awareness - Emotional Awareness
+    interrelations[self_awareness_aspects.index('social_awareness'), self_awareness_aspects.index('emotional_awareness')] = 0.2
+    interrelations[self_awareness_aspects.index('emotional_awareness'), self_awareness_aspects.index('social_awareness')] = 0.2
+
+    # 5. Self-monitoring - Self-development
+    interrelations[self_awareness_aspects.index('self-monitoring'), self_awareness_aspects.index('self-development')] = 0.2
+    interrelations[self_awareness_aspects.index('self-development'), self_awareness_aspects.index('self-monitoring')] = 0.2
+    
     learning_rate = 0.01
 
     print("Initial Weights:")
