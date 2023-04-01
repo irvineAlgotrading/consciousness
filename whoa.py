@@ -181,11 +181,11 @@ def main():
         # Use the cognition_prompt in your GPT-4 API request
         # print(cognition_prompt)
         print(f"Current input data: {input_data}")
-        print(f"Current input data: {brain_regions}")  
+        #print(f"Current input data: {brain_regions}")  
 
 
         # Update values every 5 seconds
-        time.sleep(5)
+        time.sleep(1)
 
 if __name__ == '__main__':
     main()
