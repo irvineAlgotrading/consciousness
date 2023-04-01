@@ -13,33 +13,60 @@ def rebalance_weights(weights):
     return rebalanced_weights
 
 def main():
-    weights = np.random.uniform(-5, 5, 20)
-    print(f"Original weights: {weights}")
+    self_awareness_aspects = [
+        'body_awareness',
+        'emotional_awareness',
+        'introspection',
+        'reflection',
+        'theory_of_mind',
+        'temporal_awareness',
+        'self-recognition',
+        'self-esteem',
+        'agency',
+        'self-regulation',
+        'self-concept',
+        'self-efficacy',
+        'self-monitoring',
+        'metacognition',
+        'moral_awareness',
+        'social_awareness',
+        'situational_awareness',
+        'motivation',
+        'goal-setting',
+        'self-development'
+    ]
 
-    # Initialize lists for storing weights and iteration numbers for the plot
+    weights = np.random.uniform(-5, 5, 20)
+    weight_dict = dict(zip(self_awareness_aspects, weights))
+    print(f"Original weights: {weight_dict}")
+
     plot_weights = []
     plot_iterations = []
 
     for iteration in range(100):
-        rebalanced_weights = rebalance_weights(weights)
+        rebalanced_weights = rebalance_weights(list(weight_dict.values()))
+        weight_dict = dict(zip(self_awareness_aspects, rebalanced_weights))
         estimated_output = sum(rebalanced_weights) / len(rebalanced_weights)
 
         response = world_environment(estimated_output, iteration)
 
         # Update weights based on the environment's response
-        weights = [w + response for w in rebalanced_weights]
+        updated_weights = [w + response for w in rebalanced_weights]
+        weight_dict = dict(zip(self_awareness_aspects, updated_weights))
 
-        plot_weights.append(weights)
+        plot_weights.append(updated_weights)
         plot_iterations.append(iteration)
 
-    print(f"Final weights: {weights}")
+    print(f"Final weights: {weight_dict}")
 
     # Create the plot
     plt.figure()
-    plt.plot(plot_iterations, plot_weights)
+    for i, aspect in enumerate(self_awareness_aspects):
+        plt.plot(plot_iterations, [w[i] for w in plot_weights], label=aspect)
     plt.xlabel("Iteration")
     plt.ylabel("Weights")
     plt.title("Weights Stabilization as Randomness Decreases")
+    plt.legend(loc='upper left', bbox_to_anchor=(1.05, 1))
     plt.show()
 
 if __name__ == "__main__":
