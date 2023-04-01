@@ -15,6 +15,10 @@ def sgd_update(rebalanced_weights, responses, learning_rate):
     updated_weights = [w - learning_rate * g for w, g in zip(rebalanced_weights, gradients)]
     return updated_weights
 
+def scale_weights(weights, initial_sum):
+    current_sum = sum(abs(w) for w in weights)
+    return [w * initial_sum / current_sum for w in weights]
+
 def main():
     self_awareness_aspects = [
         'body_awareness',
@@ -99,15 +103,20 @@ def main():
     plot_weights = []
     plot_iterations = []
     plot_randomness = []
-
+    
+    # Main loop
     for iteration in range(10000):
         rebalanced_weights = rebalance_weights(list(weight_dict.values()), interrelations)
-        weight_dict = dict(zip(self_awareness_aspects, rebalanced_weights))
+
         estimated_output = sum(rebalanced_weights) / len(rebalanced_weights)
 
         responses = world_environment(values=rebalanced_weights, iteration=iteration)
 
         updated_weights = sgd_update(rebalanced_weights, responses, learning_rate)
+        
+        # Scale the updated weights
+        updated_weights = scale_weights(updated_weights, sum(abs(w) for w in initial_values.values()))
+
         weight_dict = dict(zip(self_awareness_aspects, updated_weights))
 
         plot_weights.append(updated_weights)
@@ -131,7 +140,7 @@ def main():
     ax2.set_ylabel("Randomness")
     ax2.set_xlabel("Iteration")
 
-    plt.subplots_adjust(left=0.065, bottom=0.125, right=0.802, top=0.88, wspace=0.2, hspace=0.2)
+    plt.subplots_adjust(left=0.065, bottom=0.125, right=0.667, top=0.88, wspace=0.2, hspace=0.2)
 
     plt.show()
 
