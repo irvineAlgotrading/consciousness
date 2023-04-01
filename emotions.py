@@ -18,7 +18,7 @@ def sgd_update(rebalanced_weights, responses, learning_rate):
     return updated_weights
 
 def main():
-    #these are the things it will be optimizing f
+    #these are the things it will be optimizing
     self_awareness_aspects = [
         'body_awareness',
         'emotional_awareness',
@@ -39,37 +39,38 @@ def main():
         'situational_awareness',
         'motivation',
         'goal-setting',
-        'self-development'
+        'self-development',
+        'anger',
+        'fear',
+        'sadness',
+        'joy',
+        'disgust',
+        'trust',
+        'anticipation',
+        'surprise',
+        'guilt',
+        'shame',
+        'envy',
+        'jealousy',
+        'boredom',
+        'contempt',
+        'embarrassment',
+        'happiness',
+        'hope',
+        'relief',
+        'pride',
+        'resentment',
+        'anxiety',
+        'disappointment',
+        'frustration',
+        'regret',
+        'satisfaction',
+        'sympathy'
     ]
 
-    # Rank the states of consciousness by their benefit (1 being the most beneficial)
-    consciousness_rank = {
-        1: 'self-development',
-        2: 'goal-setting',
-        3: 'motivation',
-        4: 'self-regulation',
-        5: 'self-efficacy',
-        6: 'self-monitoring',
-        7: 'metacognition',
-        8: 'moral_awareness',
-        9: 'social_awareness',
-        10: 'situational_awareness',
-        11: 'agency',
-        12: 'self-esteem',
-        13: 'self-recognition',
-        14: 'temporal_awareness',
-        15: 'theory_of_mind',
-        16: 'reflection',
-        17: 'introspection',
-        18: 'emotional_awareness',
-        19: 'self-concept',
-        20: 'body_awareness'
-    }
-
-    # Assign initial values based on the rank
+    # Initialize with equal weights
     num_aspects = len(self_awareness_aspects)
-    increment = 2 / (num_aspects - 1)
-    initial_values = {aspect: -1 + increment * (rank - 1) for rank, aspect in consciousness_rank.items()}
+    initial_values = {aspect: 1.0 / num_aspects for aspect in self_awareness_aspects}
     weight_dict = {aspect: initial_values[aspect] for aspect in self_awareness_aspects}
 
     learning_rate = 0.01
@@ -103,7 +104,7 @@ def main():
     for aspect, weight in sorted(weight_dict.items(), key=lambda x: x[1], reverse=True):
         print(f"{aspect:<24}{weight:.4f}")
 
-        # Create the plot
+    # Create the plot
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 8), sharex=True)
 
     # Plot the weight stabilization
@@ -125,3 +126,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
