@@ -89,7 +89,27 @@ def main():
         ('introspection', 'reflection'),
         ('reflection', 'theory_of_mind'),
         ('agency', 'motivation'),
-        ('temporal_awareness', 'introspection')
+        ('temporal_awareness', 'introspection'),
+        ('emotional_awareness', 'introspection'),
+        ('self-recognition', 'theory_of_mind'),
+        ('self-esteem', 'self-concept'),
+        ('agency', 'self-regulation'),
+        ('situational_awareness', 'social_awareness'),
+        ('moral_awareness', 'introspection'),
+        ('metacognition', 'self-monitoring'),
+        ('self-development', 'goal-setting'),
+        ('motivation', 'self-efficacy'),
+        ('temporal_awareness', 'reflection'),
+        ('self-recognition', 'self-monitoring'),
+        ('social_awareness', 'theory_of_mind'),
+        ('emotional_awareness', 'moral_awareness'),
+        ('self-regulation', 'reflection'),
+        ('self-concept', 'self-esteem'),
+        ('introspection', 'moral_awareness'),
+        ('theory_of_mind', 'social_awareness'),
+        ('self-monitoring', 'self-regulation'),
+        ('goal-setting', 'self-development'),
+        ('agency', 'situational_awareness')
     ]
 
     for aspect1, aspect2 in interrelationships:
