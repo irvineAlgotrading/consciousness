@@ -73,26 +73,29 @@ def main():
 
     interrelations = np.identity(num_aspects)
 
-    # 1. Metacognition - Introspection
-    interrelations[self_awareness_aspects.index('metacognition'), self_awareness_aspects.index('introspection')] = 0.01
-    interrelations[self_awareness_aspects.index('introspection'), self_awareness_aspects.index('metacognition')] = 0.01
+    # Define interrelations between aspects of consciousness
+    interrelationships = [
+        ('metacognition', 'introspection'),
+        ('goal-setting', 'motivation'),
+        ('self-regulation', 'self-efficacy'),
+        ('social_awareness', 'emotional_awareness'),
+        ('self-monitoring', 'self-development'),
+        ('body_awareness', 'self-recognition'),
+        ('self-esteem', 'agency'),
+        ('self-concept', 'reflection'),
+        ('self-efficacy', 'goal-setting'),
+        ('moral_awareness', 'theory_of_mind'),
+        ('situational_awareness', 'temporal_awareness'),
+        ('introspection', 'reflection'),
+        ('reflection', 'theory_of_mind'),
+        ('agency', 'motivation'),
+        ('temporal_awareness', 'introspection')
+    ]
 
-    # 2. Goal-setting - Motivation
-    interrelations[self_awareness_aspects.index('goal-setting'), self_awareness_aspects.index('motivation')] = 0.01
-    interrelations[self_awareness_aspects.index('motivation'), self_awareness_aspects.index('goal-setting')] = 0.01
+    for aspect1, aspect2 in interrelationships:
+        interrelations[self_awareness_aspects.index(aspect1), self_awareness_aspects.index(aspect2)] = 0.01
+        interrelations[self_awareness_aspects.index(aspect2), self_awareness_aspects.index(aspect1)] = 0.01
 
-    # 3. Self-regulation - Self-efficacy
-    interrelations[self_awareness_aspects.index('self-regulation'), self_awareness_aspects.index('self-efficacy')] = 0.01
-    interrelations[self_awareness_aspects.index('self-efficacy'), self_awareness_aspects.index('self-regulation')] = 0.01
-
-    # 4. Social Awareness - Emotional Awareness
-    interrelations[self_awareness_aspects.index('social_awareness'), self_awareness_aspects.index('emotional_awareness')] = 0.01
-    interrelations[self_awareness_aspects.index('emotional_awareness'), self_awareness_aspects.index('social_awareness')] = 0.01
-
-    # 5. Self-monitoring - Self-development
-    interrelations[self_awareness_aspects.index('self-monitoring'), self_awareness_aspects.index('self-development')] = 0.01
-    interrelations[self_awareness_aspects.index('self-development'), self_awareness_aspects.index('self-monitoring')] = 0.01
-    
     learning_rate = 0.01
 
     print("Initial Weights:")
@@ -103,7 +106,7 @@ def main():
     plot_weights = []
     plot_iterations = []
     plot_randomness = []
-    
+
     # Main loop
     for iteration in range(10000):
         rebalanced_weights = rebalance_weights(list(weight_dict.values()), interrelations)
@@ -113,7 +116,7 @@ def main():
         responses = world_environment(values=rebalanced_weights, iteration=iteration)
 
         updated_weights = sgd_update(rebalanced_weights, responses, learning_rate)
-        
+
         # Scale the updated weights
         updated_weights = scale_weights(updated_weights, sum(abs(w) for w in initial_values.values()))
 
@@ -140,7 +143,12 @@ def main():
     ax2.set_ylabel("Randomness")
     ax2.set_xlabel("Iteration")
 
-    plt.subplots_adjust(left=0.065, bottom=0.125, right=0.667, top=0.88, wspace=0.2, hspace=0.2)
+    # Show initial and final weights on the plot
+    for i, aspect in enumerate(self_awareness_aspects):
+        ax1.text(plot_iterations[-1] + 100, plot_weights[-1][i], f'{aspect}: {plot_weights[-1][i]:.4f}', fontsize=8)
+        ax1.text(0, plot_weights[0][i], f'{aspect}: {plot_weights[0][i]:.4f}', fontsize=8)
+
+    plt.subplots_adjust(left=0.065, bottom=0.125, right=0.802, top=0.88, wspace=0.2, hspace=0.2)
 
     plt.show()
 
