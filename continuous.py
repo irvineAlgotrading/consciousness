@@ -2,6 +2,7 @@ import numpy as np
 import random
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+import keyboard
 
 def world_environment(values, iteration):
     randomness = 1 - np.exp(-iteration / 100)
@@ -20,22 +21,42 @@ def scale_weights(weights, initial_sum):
     current_sum = sum(abs(w) for w in weights)
     return [w * initial_sum / current_sum for w in weights]
 
+def apply_hard_input_step_changes(weights):
+    if keyboard.is_pressed('up'):
+        random_state_index = random.randint(0, len(weights) - 1)
+        weights[random_state_index] = 1
+    elif keyboard.is_pressed('down'):
+        random_state_index = random.randint(0, len(weights) - 1)
+        weights[random_state_index] = 0
+    return weights
+
 def update_plot(frame, plot_weights, plot_randomness, self_awareness_aspects, ax1, ax2):
     ax1.clear()
     ax2.clear()
 
+    lines = []
     for i, aspect in enumerate(self_awareness_aspects):
-        ax1.plot(frame, [w[i] for w in plot_weights[-20:]], label=aspect)
+        line, = ax1.plot(frame, [w[i] for w in plot_weights[-20:]], label=aspect, lw=0.5) # reduce line weight by half
+        lines.append(line)
+
     ax1.set_ylabel("Weights")
     ax1.set_title("Weights Stabilization as Randomness Decreases")
     ax1.legend(loc='upper left', bbox_to_anchor=(1.05, 1))
+
+    # Add live updating y values on the right side axis
+    for i, line in enumerate(lines):
+        aspect = self_awareness_aspects[i]
+        y_value = plot_weights[-1][i]
+        color = line.get_color()
+        ax1.annotate(f"{aspect}: {y_value:.4f}", xy=(1.01, y_value), xycoords=("axes fraction", "data"),
+             textcoords=("axes fraction", "data"), color=color, va="center", fontsize=8,
+             xytext=(5, 0))
 
     ax2.plot(frame, plot_randomness[-20:])
     ax2.set_ylabel("Randomness")
     ax2.set_xlabel("Iteration")
 
-    plt.subplots_adjust(left=0.065, bottom=0.125, right=0.802, top=0.88, wspace=0.2, hspace=0.2)
-
+    plt.subplots_adjust(left=0.065, bottom=0.125, right=0.400, top=0.88, wspace=0.3, hspace=0.3)
 
 def main():
     self_awareness_aspects = [
@@ -131,8 +152,8 @@ def main():
     ]
 
     for aspect1, aspect2 in interrelationships:
-        interrelations[self_awareness_aspects.index(aspect1), self_awareness_aspects.index(aspect2)] = 0.01
-        interrelations[self_awareness_aspects.index(aspect2), self_awareness_aspects.index(aspect1)] = 0.01
+        interrelations[self_awareness_aspects.index(aspect1), self_awareness_aspects.index(aspect2)] = 0.02
+        interrelations[self_awareness_aspects.index(aspect2), self_awareness_aspects.index(aspect1)] = 0.02
 
     learning_rate = 0.01
 
@@ -146,8 +167,11 @@ def main():
     plot_randomness = []
 
     # Main loop
-    for iteration in range(10000):
+    num_iterations = 1
+    for iteration in range(num_iterations):
         rebalanced_weights = rebalance_weights(list(weight_dict.values()), interrelations)
+        # Apply hard input step changes
+        updated_weights = apply_hard_input_step_changes(updated_weights)
 
         estimated_output = sum(rebalanced_weights) / len(rebalanced_weights)
 
@@ -163,7 +187,7 @@ def main():
         plot_weights.append(updated_weights)
         plot_iterations.append(iteration)
         plot_randomness.append(1 - np.log10(iteration + 1) / 3.33)
-
+        
     print("\nFinal Weights:")
     print(f"Aspect{' ':<20}Weight")
     for aspect, weight in sorted(weight_dict.items(), key=lambda x: x[1], reverse=True):
@@ -178,6 +202,10 @@ def main():
         nonlocal plot_randomness
 
         rebalanced_weights = rebalance_weights(list(weight_dict.values()), interrelations)
+
+         # Apply hard input step changes
+        updated_weights = apply_hard_input_step_changes(updated_weights)
+
 
         estimated_output = sum(rebalanced_weights) / len(rebalanced_weights)
 
@@ -201,7 +229,7 @@ def main():
 
         update_plot(plot_iterations, plot_weights, plot_randomness, self_awareness_aspects, ax1, ax2)
 
-    ani = FuncAnimation(fig, animate, interval=1000)
+    ani = FuncAnimation(fig, animate, interval=1)
 
     plt.show()
 
