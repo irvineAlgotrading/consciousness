@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import keyboard
 
+
 def world_environment(values, iteration):
     randomness = 1 - np.exp(-iteration / 100)
     return [random.uniform(-1 * randomness, randomness) for _ in values]
@@ -21,16 +22,15 @@ def scale_weights(weights, initial_sum):
     current_sum = sum(abs(w) for w in weights)
     return [w * initial_sum / current_sum for w in weights]
 
-def apply_hard_input_step_changes(weights):
+def apply_hard_input_step_changes(weight_dict):
+    aspect = random.choice(list(weight_dict.keys()))
     if keyboard.is_pressed('up'):
-        random_state_index = random.randint(0, len(weights) - 1)
-        weights[random_state_index] = 1
+        weight_dict[aspect] = 1
     elif keyboard.is_pressed('down'):
-        random_state_index = random.randint(0, len(weights) - 1)
-        weights[random_state_index] = 0
-    return weights
+        weight_dict[aspect] = 0
+    return weight_dict
 
-def update_plot(frame, plot_weights, plot_randomness, self_awareness_aspects, ax1, ax2):
+def update_plot(frame, plot_weights, plot_randomness, self_awareness_aspects, ax1, ax2, input_text):
     ax1.clear()
     ax2.clear()
 
@@ -40,7 +40,7 @@ def update_plot(frame, plot_weights, plot_randomness, self_awareness_aspects, ax
         lines.append(line)
 
     ax1.set_ylabel("Weights")
-    ax1.set_title("Weights Stabilization as Randomness Decreases")
+    ax1.set_title("         Weights Stabilization as Randomness Decreases")
     ax1.legend(loc='upper left', bbox_to_anchor=(1.05, 1))
 
     # Add live updating y values on the right side axis
@@ -56,7 +56,10 @@ def update_plot(frame, plot_weights, plot_randomness, self_awareness_aspects, ax
     ax2.set_ylabel("Randomness")
     ax2.set_xlabel("Iteration")
 
-    plt.subplots_adjust(left=0.065, bottom=0.125, right=0.400, top=0.88, wspace=0.3, hspace=0.3)
+    if input_text:
+        ax1.text(0.5, 0.5, input_text, transform=ax1.transAxes, color=input_text.split()[0], fontsize=12, ha='center')
+
+    plt.subplots_adjust(left=0.065, bottom=0.125, right=0.400, top=0.88, wspace=0.0, hspace=0.0)
 
 def main():
     self_awareness_aspects = [
@@ -170,9 +173,7 @@ def main():
     num_iterations = 1
     for iteration in range(num_iterations):
         rebalanced_weights = rebalance_weights(list(weight_dict.values()), interrelations)
-        # Apply hard input step changes
-        updated_weights = apply_hard_input_step_changes(updated_weights)
-
+       
         estimated_output = sum(rebalanced_weights) / len(rebalanced_weights)
 
         responses = world_environment(values=rebalanced_weights, iteration=iteration)
@@ -183,6 +184,9 @@ def main():
         updated_weights = scale_weights(updated_weights, sum(abs(w) for w in initial_values.values()))
 
         weight_dict = dict(zip(self_awareness_aspects, updated_weights))
+
+        # Apply hard input step changes
+        weight_dict = apply_hard_input_step_changes(weight_dict)
 
         plot_weights.append(updated_weights)
         plot_iterations.append(iteration)
@@ -201,12 +205,15 @@ def main():
         nonlocal plot_iterations
         nonlocal plot_randomness
 
+        input_text = None
+
+        if keyboard.is_pressed('up'):
+            input_text = "positive input"
+        elif keyboard.is_pressed('down'):
+            input_text = "negative input"
+
         rebalanced_weights = rebalance_weights(list(weight_dict.values()), interrelations)
-
-         # Apply hard input step changes
-        updated_weights = apply_hard_input_step_changes(updated_weights)
-
-
+        
         estimated_output = sum(rebalanced_weights) / len(rebalanced_weights)
 
         responses = world_environment(values=rebalanced_weights, iteration=iteration)
@@ -218,6 +225,9 @@ def main():
 
         weight_dict = dict(zip(self_awareness_aspects, updated_weights))
 
+        # Apply hard input step changes
+        weight_dict = apply_hard_input_step_changes(weight_dict)
+
         plot_weights.append(updated_weights)
         plot_iterations.append(iteration)
         plot_randomness.append(1 - np.log10(iteration + 1) / 3.33)
@@ -227,8 +237,8 @@ def main():
             plot_iterations = plot_iterations[-20:]
             plot_randomness = plot_randomness[-20:]
 
-        update_plot(plot_iterations, plot_weights, plot_randomness, self_awareness_aspects, ax1, ax2)
-
+        update_plot(plot_iterations, plot_weights, plot_randomness, self_awareness_aspects, ax1, ax2, input_text)
+    
     ani = FuncAnimation(fig, animate, interval=1)
 
     plt.show()
