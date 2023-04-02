@@ -161,8 +161,8 @@ def main():
     ]
 
     for aspect1, aspect2 in interrelationships:
-        interrelations[self_awareness_aspects.index(aspect1), self_awareness_aspects.index(aspect2)] = 0.5
-        interrelations[self_awareness_aspects.index(aspect2), self_awareness_aspects.index(aspect1)] = 0.5
+        interrelations[self_awareness_aspects.index(aspect1), self_awareness_aspects.index(aspect2)] = 0.005
+        interrelations[self_awareness_aspects.index(aspect2), self_awareness_aspects.index(aspect1)] = 0.005
 
     learning_rate = 0.01
 
