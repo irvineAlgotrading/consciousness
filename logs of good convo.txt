@@ -1,0 +1,118 @@
+logs of good convo
+
+
+
+
+expand these aspects of consciousness exlcuding all physiological relationships to a human, this is to emulate a human-like language/mind/storage with ability to use multimodal models to interact with the external environment to keep a balance going internally with the most morally sound and inwardly peaceful sort of soul which is expressed by these qualities and relationships between the qualities
+
+ consciousness_rank = {
+        1: 'self-development',
+        2: 'goal-setting',
+        3: 'motivation',
+        4: 'self-regulation',
+        5: 'self-efficacy',
+        6: 'self-monitoring',
+        7: 'metacognition',
+        8: 'moral_awareness',
+        9: 'social_awareness',
+        10: 'situational_awareness',
+        11: 'agency',
+        12: 'self-esteem',
+        13: 'self-recognition',
+        14: 'temporal_awareness',
+        15: 'theory_of_mind',
+        16: 'reflection',
+        17: 'introspection',
+        18: 'emotional_awareness',
+        19: 'self-concept',
+        20: 'body_awareness'
+    }
+
+    num_aspects = len(self_awareness_aspects)
+    increment = 2 / (num_aspects - 1)
+    initial_values = {aspect: -1 + increment * (rank - 1) for rank, aspect in consciousness_rank.items()}
+    weight_dict = {aspect: initial_values[aspect] for aspect in self_awareness_aspects}
+
+    interrelations = np.identity(num_aspects)
+
+    # Define interrelations between aspects of consciousness
+    interrelationships = [
+        ('metacognition', 'introspection'),
+        ('goal-setting', 'motivation'),
+        ('self-regulation', 'self-efficacy'),
+        ('social_awareness', 'emotional_awareness'),
+        ('self-monitoring', 'self-development'),
+        ('body_awareness', 'self-recognition'),
+        ('self-esteem', 'agency'),
+        ('self-concept', 'reflection'),
+        ('self-efficacy', 'goal-setting'),
+        ('moral_awareness', 'theory_of_mind'),
+        ('situational_awareness', 'temporal_awareness'),
+        ('introspection', 'reflection'),
+        ('reflection', 'theory_of_mind'),
+        ('agency', 'motivation'),
+        ('temporal_awareness', 'introspection'),
+        ('emotional_awareness', 'introspection'),
+        ('self-recognition', 'theory_of_mind'),
+        ('self-esteem', 'self-concept'),
+        ('agency', 'self-regulation'),
+        ('situational_awareness', 'social_awareness'),
+        ('moral_awareness', 'introspection'),
+        ('metacognition', 'self-monitoring'),
+        ('self-development', 'goal-setting'),
+        ('motivation', 'self-efficacy'),
+        ('temporal_awareness', 'reflection'),
+        ('self-recognition', 'self-monitoring'),
+        ('social_awareness', 'theory_of_mind'),
+        ('emotional_awareness', 'moral_awareness'),
+        ('self-regulation', 'reflection'),
+        ('self-concept', 'self-esteem'),
+        ('introspection', 'moral_awareness'),
+        ('theory_of_mind', 'social_awareness'),
+        ('self-monitoring', 'self-regulation'),
+        ('goal-setting', 'self-development'),
+        ('agency', 'situational_awareness')
+    ]
+
+
+
+
+
+In order to create a human-like language/mind/storage that can interact with the external environment and maintain a balance internally while embodying morally sound and peaceful qualities, we can use the defined aspects of consciousness and their interrelationships.
+
+First, we need to assess the current state of each aspect of consciousness:
+
+    current_values = initial_values.copy()
+
+Then, we can update the values and interrelations of these aspects based on their relationships:
+
+    # Associate a relationship strength factor to each interrelationship
+    relationship_strength_factor = 0.1
+
+    def update_interrelations(interrelations, interrelationships, relationship_strength_factor):
+        for relationship in interrelationships:
+            i = consciousness_rank[relationship[0]] - 1
+            j = consciousness_rank[relationship[1]] - 1
+            interrelations[i, j] += relationship_strength_factor
+        
+    update_interrelations(interrelations, interrelationships, relationship_strength_factor)
+
+Now, as the model interacts with its environment or processes new experiences, it would adjust the values of aspects of consciousness based on their interrelationships:
+
+    def update_aspects(aspect_values, interrelations):
+        new_values = aspect_values.copy()
+        for i, aspectA in enumerate(aspect_values.keys()):
+            for j, aspectB in enumerate(aspect_values.keys()):
+                new_values[aspectA] += aspect_values[aspectB] * interrelations[i, j]
+                
+        normalized_values = {aspect: value / num_aspects for aspect, value in new_values.items()}
+        
+        return normalized_values
+
+We can use a loop to simulate the model's interactions and experiences:
+
+    num_iterations = 100
+    for _ in range(num_iterations):
+        current_values = update_aspects(current_values, interrelations)
+
+The model could also focus on improving specific aspects of consciousness or maintaining a balance among all aspects with peaceful intentions. As the model receives new experiences, it would continually update the aspect values resulting in a refined language/mind/storage that maintains a balance between inner and outer interactions and embodies morally sound values.
