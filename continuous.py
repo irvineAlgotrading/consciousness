@@ -1,27 +1,46 @@
+# # This is a Python script that simulates the process of stabilizing the weights 
+# of different aspects of self-awareness in an artificial intelligence (AI) system. 
+# The AI system is modeled as a set of weights, with each weight corresponding to an 
+# aspect of self-awareness. The script uses stochastic gradient descent (SGD) to 
+# update the weights based on the responses of a simulated environment.
+
 import numpy as np
 import random
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import keyboard
 
-
+# The script first defines a function world_environment that simulates the responses 
+# of the environment. The function takes in two arguments, values and iteration, and 
+# returns a list of random numbers with a magnitude that depends on the value of iteration.
 def world_environment(values, iteration):
     randomness = 1 - np.exp(-iteration / 100)
     return [random.uniform(-1 * randomness, randomness) for _ in values]
 
+# Next, the function rebalance_weights takes in the current weights and a matrix 
+# of interrelations between the aspects of self-awareness, and returns a list of
+# updated weights that takes into account the interrelations between the different aspects.
 def rebalance_weights(weights, interrelations):
     rebalanced_weights = [sum(w * interrelations[i]) for i, w in enumerate(weights)]
     return rebalanced_weights
 
+# The function sgd_update takes in the updated weights, the responses from the environment, 
+# and a learning rate, and returns a new set of weights that have been updated based on the 
+# responses from the environment.
 def sgd_update(rebalanced_weights, responses, learning_rate):
     gradients = [r for r in responses]
     updated_weights = [w - learning_rate * g for w, g in zip(rebalanced_weights, gradients)]
     return updated_weights
 
+# The function scale_weights scales the updated weights so that their sum is equal to the sum of 
+# the initial weights.
 def scale_weights(weights, initial_sum):
     current_sum = sum(abs(w) for w in weights)
     return [w * initial_sum / current_sum for w in weights]
 
+# The function apply_hard_input_step_changes simulates the effect of external inputs on the weights
+# by randomly choosing one of the aspects of self-awareness and setting its weight to either 0 or 1
+# depending on whether the user has pressed the up or down arrow key, respectively.
 def apply_hard_input_step_changes(weight_dict):
     aspect = random.choice(list(weight_dict.keys()))
     if keyboard.is_pressed('up'):
@@ -30,6 +49,10 @@ def apply_hard_input_step_changes(weight_dict):
         weight_dict[aspect] = 0
     return weight_dict
 
+# The function update_plot is used to update the plot that displays the weights and randomness
+# over time. The function takes in several arguments including the current frame, the weights, 
+# randomness, and other information about the aspects of self-awareness. It then uses Matplotlib 
+# to update the plot with the new information.
 def update_plot(frame, plot_weights, plot_randomness, self_awareness_aspects, ax1, ax2, input_text):
     ax1.clear()
     ax2.clear()
@@ -66,6 +89,13 @@ def update_plot(frame, plot_weights, plot_randomness, self_awareness_aspects, ax
 
     plt.subplots_adjust(left=0.065, bottom=0.125, right=0.400, top=0.88, wspace=0.0, hspace=0.0)
 
+# This code defines a main() function which performs a simulation on a system of self-awareness aspects.
+# The function starts by defining two dictionaries: self_awareness_aspects and consciousness_rank. The
+# first dictionary lists 20 aspects of self-awareness, while the second dictionary provides a ranking 
+# for each of these aspects. The code then calculates the number of aspects, defines an identity matrix
+#  for the interrelations between the aspects, and defines a set of interrelationships between the
+#  aspects. The code then sets an initial weight for each aspect based on its ranking, and sets a 
+# learning rate for the simulation.
 
 def main():
     self_awareness_aspects = [
@@ -175,6 +205,12 @@ def main():
     plot_iterations = []
     plot_randomness = []
 
+    # The main() function then enters a loop which runs a simulation for a specified number of iterations.
+    # In each iteration, the weights are rebalanced, an estimated output is calculated, responses are
+    # generated based on the rebalanced weights and estimated output, and the weights are updated using 
+    # stochastic gradient descent. The updated weights are then scaled and hard input step changes are applied. 
+    # The weights and other information are then plotted using matplotlib.
+    
     # Main loop
     num_iterations = 1
     for iteration in range(num_iterations):
@@ -198,10 +234,10 @@ def main():
         plot_iterations.append(iteration)
         plot_randomness.append(1 - np.log10(iteration + 1) / 3.33)
         
-    print("\nFinal Weights:")
-    print(f"Aspect{' ':<20}Weight")
-    for aspect, weight in sorted(weight_dict.items(), key=lambda x: x[1], reverse=True):
-        print(f"{aspect:<24}{weight:.4f}")
+    # print("\nFinal Weights:")
+    # print(f"Aspect{' ':<20}Weight")
+    # for aspect, weight in sorted(weight_dict.items(), key=lambda x: x[1], reverse=True):
+    #     print(f"{aspect:<24}{weight:.4f}")
 
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 8), sharex=True)
 
