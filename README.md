@@ -1,5 +1,7 @@
 # consciousness
 
+@1a1n1d1y on twitter if you wanna talk
+
 use up arrow on keyboard to introduce a positive response from the environment
 use down arrow to introduce a negative response
 hold the key for the length of introduction
