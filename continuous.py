@@ -81,6 +81,13 @@ def update_plot(frame, plot_weights, plot_randomness, self_awareness_aspects, ax
     ax2.set_ylabel("Randomness")
     ax2.set_xlabel("Iteration")
 
+    # Calculate the average slope over the frame of the rolling window for randomness
+    window_size = 10
+    if len(plot_randomness) > window_size:
+        randomness_window = plot_randomness[-window_size:]
+        slope = np.polyfit(frame[-window_size:], randomness_window, 1)[0]
+        ax2.text(0.5, -0.1, f"Slope: {slope:.4f}", transform=ax2.transAxes, color='black', fontsize=12, ha='center')
+
     if input_text:
         color = input_text.split()[0]
         if color not in ['green', 'red']:
@@ -88,6 +95,7 @@ def update_plot(frame, plot_weights, plot_randomness, self_awareness_aspects, ax
         ax1.text(0.5, 0.5, input_text, transform=ax1.transAxes, color=color, fontsize=12, ha='center')
 
     plt.subplots_adjust(left=0.065, bottom=0.125, right=0.400, top=0.88, wspace=0.0, hspace=0.0)
+
 
 # This code defines a main() function which performs a simulation on a system of self-awareness aspects.
 # The function starts by defining two dictionaries: self_awareness_aspects and consciousness_rank. The
