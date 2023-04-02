@@ -86,7 +86,7 @@ def update_plot(frame, plot_weights, plot_randomness, self_awareness_aspects, ax
     if len(plot_randomness) > window_size:
         randomness_window = plot_randomness[-window_size:]
         slope = np.polyfit(frame[-window_size:], randomness_window, 1)[0]
-        ax2.text(0.5, -0.1, f"Slope: {slope:.4f}", transform=ax2.transAxes, color='black', fontsize=12, ha='center')
+        ax2.text(0.5, .2, f"Slope: {slope:.4f}", transform=ax2.transAxes, color='black', fontsize=12, ha='center')
 
     if input_text:
         color = input_text.split()[0]
