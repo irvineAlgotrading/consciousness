@@ -59,7 +59,7 @@ def update_plot(frame, plot_weights, plot_randomness, self_awareness_aspects, ax
 
     lines = []
     for i, aspect in enumerate(self_awareness_aspects):
-        line, = ax1.plot(frame, [w[i] for w in plot_weights[-20:]], label=aspect, lw=2) 
+        line, = ax1.plot(frame, [w[i] for w in plot_weights[-20:]], label=aspect, lw=3) 
         lines.append(line)
 
     ax1.set_ylabel("Weights")
