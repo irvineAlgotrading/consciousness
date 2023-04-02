@@ -47,7 +47,9 @@ def update_plot(frame, plot_weights, plot_randomness, self_awareness_aspects, ax
     for i, line in enumerate(lines):
         aspect = self_awareness_aspects[i]
         y_value = plot_weights[-1][i]
-        color = line.get_color() if line.get_color() in ['green', 'red'] else 'black'
+        color = line.get_color()
+        if color not in ['green', 'red']:
+            color = 'black'
         ax1.annotate(f"{aspect}: {y_value:.4f}", xy=(1.01, y_value), xycoords=("axes fraction", "data"),
              textcoords=("axes fraction", "data"), color=color, va="center", fontsize=8,
              xytext=(5, 0))
@@ -57,9 +59,13 @@ def update_plot(frame, plot_weights, plot_randomness, self_awareness_aspects, ax
     ax2.set_xlabel("Iteration")
 
     if input_text:
-        ax1.text(0.5, 0.5, input_text, transform=ax1.transAxes, color=input_text.split()[0], fontsize=12, ha='center')
+        color = input_text.split()[0]
+        if color not in ['green', 'red']:
+            color = 'black'
+        ax1.text(0.5, 0.5, input_text, transform=ax1.transAxes, color=color, fontsize=12, ha='center')
 
     plt.subplots_adjust(left=0.065, bottom=0.125, right=0.400, top=0.88, wspace=0.0, hspace=0.0)
+
 
 def main():
     self_awareness_aspects = [
@@ -155,8 +161,8 @@ def main():
     ]
 
     for aspect1, aspect2 in interrelationships:
-        interrelations[self_awareness_aspects.index(aspect1), self_awareness_aspects.index(aspect2)] = 0.02
-        interrelations[self_awareness_aspects.index(aspect2), self_awareness_aspects.index(aspect1)] = 0.02
+        interrelations[self_awareness_aspects.index(aspect1), self_awareness_aspects.index(aspect2)] = 0.5
+        interrelations[self_awareness_aspects.index(aspect2), self_awareness_aspects.index(aspect1)] = 0.5
 
     learning_rate = 0.01
 
