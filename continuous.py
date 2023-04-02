@@ -47,7 +47,7 @@ def update_plot(frame, plot_weights, plot_randomness, self_awareness_aspects, ax
     for i, line in enumerate(lines):
         aspect = self_awareness_aspects[i]
         y_value = plot_weights[-1][i]
-        color = line.get_color()
+        color = line.get_color() if line.get_color() in ['green', 'red'] else 'black'
         ax1.annotate(f"{aspect}: {y_value:.4f}", xy=(1.01, y_value), xycoords=("axes fraction", "data"),
              textcoords=("axes fraction", "data"), color=color, va="center", fontsize=8,
              xytext=(5, 0))
